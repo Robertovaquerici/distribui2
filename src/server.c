@@ -48,7 +48,7 @@ void* worker_thread(void* param) {
 
     // Receive OP code
     char c;
-    if(recv(client_socket, &c, sizeof(char), NULL) == -1) {
+    if(recv(client_socket, &c, sizeof(char), 0) == -1) {
         printf("[ERROR][op_code] recv failed with code %s\n", strerror(errno));
         pthread_exit(1);
     }
@@ -62,22 +62,26 @@ void* worker_thread(void* param) {
             // Receive key
             if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][set_value][key] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             // Receive val1
             if(recv(client_socket, val1, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][set_value][val1] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             // Receive val2
             if(recv(client_socket, &val2, sizeof(val2), 0) == -1) {
                 printf("[ERROR][set_value][val2] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             val2 = ntohl(val2);
             // Receive val3
             if(recv(client_socket, &val3, sizeof(val3), 0) == -1) {
                 printf("[ERROR][set_value][val3] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             break;
@@ -85,6 +89,7 @@ void* worker_thread(void* param) {
             // Receive key
             if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
 
@@ -93,7 +98,8 @@ void* worker_thread(void* param) {
             // Send value
             if ( send(client_socket, val1, sizeof(char) * KEY_SIZE, 0) == -1 ){
                 printf("[ERROR][get_value][value] send failed with code %s\n", strerror(errno));
-                return -1;
+                shutdown(client_socket, SHUT_RDWR);
+                pthread_exit(2);
             }
 
             break;
@@ -101,22 +107,26 @@ void* worker_thread(void* param) {
             // Receive key
             if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][set_value][key] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             // Receive val1
             if(recv(client_socket, val1, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][set_value][val1] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             // Receive val2
             if(recv(client_socket, &val2, sizeof(val2), 0) == -1) {
                 printf("[ERROR][set_value][val2] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             val2 = ntohl(val2);
             // Receive val3
             if(recv(client_socket, &val3, sizeof(val3), 0) == -1) {
                 printf("[ERROR][set_value][val3] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             break;
@@ -124,6 +134,7 @@ void* worker_thread(void* param) {
             // Receive key
             if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][set_value][key] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             break;
@@ -131,6 +142,7 @@ void* worker_thread(void* param) {
             // Receive key
             if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][exists] recv failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             if(!isValue(key)) error = true;
@@ -140,6 +152,7 @@ void* worker_thread(void* param) {
             number_of_tuples = 27;
             if ( send(client_socket, &number_of_tuples, sizeof(char) * KEY_SIZE, 0) == -1 ){
                 printf("[ERROR][num_items] send failed with code %s\n", strerror(errno));
+                shutdown(client_socket, SHUT_RDWR);
                 pthread_exit(2);
             }
             break;
@@ -149,8 +162,12 @@ void* worker_thread(void* param) {
     int bytes_sent = send(client_socket, &fb_code, sizeof(fb_code), 0);
     if(bytes_sent == -1) {
         printf("[ERROR][fb_code] send failed with code %s\n", strerror(errno));
+        shutdown(client_socket, SHUT_RDWR);
         pthread_exit(2);
     }
+    free(key);
+    free(val1);
+    shutdown(client_socket, SHUT_RDWR);
     pthread_exit(0);
 }
 

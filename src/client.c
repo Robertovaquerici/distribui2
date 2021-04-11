@@ -176,10 +176,9 @@ void scase4(){
     if(modify_value(key, val1, val2, val3) == -1){
         printf("modify_value didn't work");
     }
-
     free(key);
     free(val1);
-
+    printf("[INFO] modify_value was successful\n");
 }
 
 void scase5(){
@@ -193,8 +192,8 @@ void scase5(){
     if (err == -1) {
         printf("delete_key didn't work");
     }
-
     free(key);
+    printf("[INFO] delete_key was successful\n");
 }
 
 void scase6(){
@@ -210,8 +209,8 @@ void scase6(){
     }else if(err == 1){
         printf("key does not exist\n");
     }
-    printf("Key does exist\n");
     free(key);
+    printf("[INFO] exists was successful\n");
 }
 
 

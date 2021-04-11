@@ -233,7 +233,7 @@ int modify_value(char * key, char * value1, int value2, float value3) {
     // Receive feedback code ('k': OK)
     if (recv(sockfd, &fb_code, sizeof(fb_code), 0) == -1) {
         printf("[ERROR][modify_value][fb_code] recv failed with code %s\n", strerror(errno));
-        return (-1);
+        return -1;
     }
     if(fb_code == 'k')
         return 0;
