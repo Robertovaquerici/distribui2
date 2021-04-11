@@ -23,8 +23,12 @@
 
 
 
-
-
+void scase2();
+void scase3();
+void scase4();
+void scase5();
+void scase6();
+void scase7();
 
 
 
@@ -61,48 +65,49 @@ int main(int argc, char* argv[]) {
     }
     while(option <= 0 || 8 <= option);
 
+    switch (option) {
+        case 1:
+            init();
+            break;
+        case 2: // set_value
+            scase2();
+            break;
+        case 3: // get_value
+            {
+            char *key = malloc(CHAR_LENGTH);
+            char *val1 = malloc(CHAR_LENGTH);
+            int val2;
+            float val3;
+            printf("Insert key to retreive values:\n");
+            scanf("%s", key);
 
+            int err = get_value(key, val1, &val2, &val3);
+            if (err) {
+                printf("get_value didn't work");
+            }
 
-    if(option == 1){
-        init();
+            free(key);
+            free(val1);
+            }
+            break;
+        case 4: // modify_value
+            scase4();
+            break;
+        case 5: // delete_key
 
-    }else if(option == 2){
-        // set_value
+            break;
+        case 6: // exists
 
+            break;
+        case 7: // num items
 
+            break;
+        default:
+            printf("Wrong code. Try again!\n");
 
-    }else if(option == 3){
-        // get_value
-        char * key = malloc(CHAR_LENGTH);
-        char * val1 = malloc(CHAR_LENGTH);
-        int val2;
-        float val3;
-        printf("Insert key to retreive values:\n");
-        scanf("%s", key);
-
-        int err = get_value(key, val1, &val2, &val3);
-        if(err){
-            printf("get_value didn't work");
-        }
-
-        free(key);
-        free(val1);
-
-    }else if(option == 4){
-        // modify_value
-
-
-    }else if(option == 5){
-        // delete_key
-
-
-
-    }else if(option == 6){
-
-    }else if(option == 7){
 
     }
-        
+
         
 
 
@@ -144,4 +149,89 @@ int main(int argc, char* argv[]) {
 
 
 }
+
+
+void scase2(){
+    // SET VALUE
+    char *key = malloc(CHAR_LENGTH);
+    char *val1 = malloc(CHAR_LENGTH);
+    int val2;
+    float val3;
+    // get data from user
+    printf("Insert key:\n");
+    scanf("%s", key);
+    printf("Insert val1:\n");
+    scanf("%s", val1);
+    printf("Insert val2:\n");
+    scanf("%d", val2);
+    printf("Insert val3:\n");
+    scanf("%f", val3);
+
+    int err = set_value(key, val1, val2, val3);
+    if (err) {
+        printf("set_value didn't work");
+    }
+
+    free(key);
+    free(val1);
+}
+
+/*void scase3(){
+
+}*/
+
+
+void scase4(){
+    // MODIFY VALUE
+    char *key = malloc(CHAR_LENGTH);
+    char *val1 = malloc(CHAR_LENGTH);
+    int val2;
+    float val3;
+    // get data from user
+    printf("Insert key:\n");
+    scanf("%s", key);
+    printf("Insert val1:\n");
+    scanf("%s", val1);
+    printf("Insert val2:\n");
+    scanf("%d", val2);
+    printf("Insert val3:\n");
+    scanf("%f", val3);
+
+    if(modify_value(key, val1, val2, val3)){
+        printf("modify_value didn't work");
+    }
+
+    free(key);
+    free(val1);
+
+}
+
+void scase5(){
+    char *key = malloc(CHAR_LENGTH);
+
+    printf("Insert key to retreive values:\n");
+    scanf("%s", key);
+
+    int err = delete_key(key);
+    if (err) {
+        printf("get_value didn't work");
+    }
+
+    free(key);
+    free(val1);
+}
+
+void scase6(){
+
+}
+
+void scase7(){
+
+}
+
+
+
+
+
+
 
