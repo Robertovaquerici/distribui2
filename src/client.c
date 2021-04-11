@@ -54,7 +54,6 @@ int main(int argc, char* argv[]) {
 
     switch (option) {
         case 1:
-            if(init() == -1);
             break;
         case 2: // set_value
             scase2();
