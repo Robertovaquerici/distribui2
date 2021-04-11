@@ -55,7 +55,7 @@ void* worker_thread(void* param) {
             break;
         case '3':
             // Receive key
-            if(recv(client_socket, &key, sizeof(char) * KEY_SIZE, 0) == -1) {
+            if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
                 pthread_exit(2);
             }
@@ -63,7 +63,7 @@ void* worker_thread(void* param) {
             // get_tuple()
             val1 = "asd";
             // Send value
-            if ( send(client_socket, &key, sizeof(char) * KEY_SIZE, 0) == -1 ){
+            if ( send(client_socket, val1, sizeof(char) * KEY_SIZE, 0) == -1 ){
                 printf("[ERROR][get_value][value] send failed with code %s\n", strerror(errno));
                 return -1;
             }

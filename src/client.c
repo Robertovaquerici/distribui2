@@ -44,8 +44,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if(!setConnectionToServer(argv[1], SERVER_PORT)){
-        printf("Connection setting error!");
+    if(setConnectionToServer(argv[1], SERVER_PORT) != 0){
+        printf("[ERROR] connection set not working\n");
     }
 
     

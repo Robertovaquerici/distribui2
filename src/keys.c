@@ -140,10 +140,11 @@ int get_value(char * key, char * value1, int * value2, float * value3){
         return -1;
     }
     // Receive value
-    if(recv(sockfd, &value1, MAX_CHAR_LENGTH, 0) == -1) {
+    if(recv(sockfd, value1, MAX_CHAR_LENGTH, 0) == -1) {
         printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
         return -1;
     }
+    printf("Value is %s\n", value1);
 
     char fb_code = 0;
     // Receive feedback code ('k': OK)
