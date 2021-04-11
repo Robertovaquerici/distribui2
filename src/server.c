@@ -33,12 +33,14 @@ void* worker_thread(void* param) {
     printf("[INFO]  Thread %lu spawned\n", this_t);
 
     int client_socket = *(int*) param;
+    printf("Socket for client %d\n", client_socket);
     // Receive OP code
     char c;
     if(recv(client_socket, &c, sizeof(char), NULL) == -1) {
         printf("[ERROR][op_code] recv failed with code %s\n", strerror(errno));
         return 3;
     }
+    printf("OP code is %c\n", c);
     char* key[KEY_SIZE], val1[KEY_SIZE];
     int32_t val2;
     float val3;
@@ -55,7 +57,6 @@ void* worker_thread(void* param) {
                 printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
                 return 3;
             }
-            //printf("%s, %s, %d, %f\n", key, val1, val2, val3);
             printf("%s", key);
             uint32_t fb_code = 0;
             int bytes_sent = send(client_socket, fb_code, strlen(fb_code), 0);
@@ -118,9 +119,13 @@ int main() {
     // Connection
     while(1) {
         struct sockaddr_in client_addr;
-        int accept_socket = accept(sockfd, (struct sockaddr*) &client_addr, sizeof(socklen_t));
-
-
+        size_t size = sizeof(client_addr);
+        int accept_socket = accept(sockfd, (struct sockaddr*) &client_addr, &size);
+        if(accept_socket == -1) {
+            printf("[ERROR] accept failed with code %s\n", strerror(errno));
+            return 3;
+        }
+        printf("Socket for client: %d\n", accept_socket);
         pthread_t t = 0;
         int thread_err = pthread_create(&t, NULL, &worker_thread, (void*) &accept_socket);
         if(thread_err != 0) {
