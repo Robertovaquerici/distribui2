@@ -44,8 +44,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if(setConnectionToServer(argv[1], SERVER_PORT) != 0){
-        printf("[ERROR] connection set not working\n");
+    if(!setConnectionToServer(argv[1], SERVER_PORT)){
+        printf("Connection setting error!");
     }
 
     
@@ -60,6 +60,7 @@ int main(int argc, char* argv[]) {
         printf("[3] Get value from key      [4] Modify a value from key\n");
         printf("[5] Delete key-value pair   [6] Check whether a key exists\n");
         printf("[7] Return number of pairs in the database\n");
+        printf("[8] Exit program\n");
         scanf("%d", &option);
 
     }
@@ -105,14 +106,15 @@ int main(int argc, char* argv[]) {
             // NUM ITEMS
             printf("Num items: %d", num_items());
             break;
-
+        case 8:
+            endConnectionToServer();
+            break;
         default:
             printf("Wrong code. Try again!\n");
 
 
     }
 
-        
 
 
 
