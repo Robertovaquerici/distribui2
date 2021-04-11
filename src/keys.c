@@ -88,6 +88,7 @@ int endConnectionToServer(){
  * */
 int init(int socket){
 
+
     char op = '1';
     int bytes_sent = send(sockfd, &op, sizeof(char), 0);
     if(bytes_sent == -1) {
