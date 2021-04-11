@@ -120,6 +120,7 @@ int main() {
         struct sockaddr_in client_addr;
         int accept_socket = accept(sockfd, (struct sockaddr*) &client_addr, sizeof(socklen_t));
 
+
         pthread_t t = 0;
         int thread_err = pthread_create(&t, NULL, &worker_thread, (void*) &accept_socket);
         if(thread_err != 0) {

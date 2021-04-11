@@ -2,20 +2,33 @@
 // Created by rober on 3/4/21.
 //
 
-/*// I/O and error dependencies
+// I/O and error dependencies
+
 #include <stdio.h>
 #include <errno.h>
+#include <stdlib.h>
 
 // TCP/IP dependencies
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <memory.h>*/
+#include <memory.h>
 
 // Include our custom-made library to connect to the server
 #include "keys.h"
 
 #define SERVER_PORT 23690
+#define CHAR_LENGTH 255
+
+
+
+
+
+
+
+
+
+
 
 int main(int argc, char* argv[]) {
 
@@ -30,6 +43,68 @@ int main(int argc, char* argv[]) {
     if(!setConnectionToServer(argv[1], SERVER_PORT)){
         printf("Connection setting error!");
     }
+
+    
+
+    int option;
+    do{
+
+        printf("Choose an option below and press Enter key\n");
+        // 1: init      2: set      3: get          4: modify
+        // 5: delete    6: exists   7: num items
+        printf("[1] Initialize database     [2] Insert key-value pair\n");
+        printf("[3] Get value from key      [4] Modify a value from key\n");
+        printf("[5] Delete key-value pair   [6] Check whether a key exists\n");
+        printf("[7] Return number of pairs in the database\n");
+        scanf("%d", &option);
+
+    }
+    while(option <= 0 || 8 <= option);
+
+
+
+    if(option == 1){
+        init();
+
+    }else if(option == 2){
+        // set_value
+
+
+
+    }else if(option == 3){
+        // get_value
+        char * key = malloc(CHAR_LENGTH);
+        char * val1 = malloc(CHAR_LENGTH);
+        int val2;
+        float val3;
+        printf("Insert key to retreive values:\n");
+        scanf("%s", key);
+
+        int err = get_value(key, val1, &val2, &val3);
+        if(err){
+            printf("get_value didn't work");
+        }
+
+        free(key);
+        free(val1);
+
+    }else if(option == 4){
+        // modify_value
+
+
+    }else if(option == 5){
+        // delete_key
+
+
+
+    }else if(option == 6){
+
+    }else if(option == 7){
+
+    }
+        
+        
+
 
 
 

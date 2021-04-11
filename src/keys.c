@@ -84,12 +84,14 @@ int endConnectionToServer(){
  * Returns 0 on success and -1 on error
  * */
 int init(int socket){
-    char op = '1';
+
+    char * op = "1";
     int bytes_sent = send(sockfd, op, strlen(op), 0);
     if(bytes_sent == -1) {
         printf("[ERROR][init] send failed with code %s\n", strerror(errno));
         return -1;
     }
+
     // success
     return 0;
 }
@@ -111,7 +113,7 @@ int set_value(char * key, char * value1, int value2, float value3){
         printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
-    // send the first value
+    /*// send the first value
     if ( send(sockfd, value1, strlen(*value1), 0) ){
         printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
         return -1;
@@ -135,7 +137,9 @@ int set_value(char * key, char * value1, int value2, float value3){
     }
     if(feedback_code != 0){
         return -1; // error
-    }
+    }*/
+
+
     // succcess
     return 0;
 
@@ -146,6 +150,7 @@ int set_value(char * key, char * value1, int value2, float value3){
  *  Returns 0 and sets values to given parameters if successful, returns -1 if error
  * */
 int get_value(char * key, char * value1, int * value2, float * value3){
+    /*
     // Notify server this is a get_value operation
     char op = '3';
     int bytes_sent = send(sockfd, op, strlen(op), 0);
@@ -153,36 +158,44 @@ int get_value(char * key, char * value1, int * value2, float * value3){
         printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
+     */
+
     // send the key
-    if ( send(sockfd, key, strlen(*key), 0) ){
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
+    if ( send(sockfd, key, MAX_CHAR_LENGTH, 0) == -1 ){
+        printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
-    // receive feedback to check if operation was carried out successfully on server
+
+    // if (recv())
+
+
+    /*// receive feedback to check if operation was carried out successfully on server
     int * feedback_code;
     if(recv(sockfd, htonl(feedback_code), sizeof(uint32_t), 0) == -1){
-        printf("[ERROR][set_value] receive failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value] receive failed with code %s\n", strerror(errno));
         return -1;
     }
     if(feedback_code != 0){return -1;}
 
     // receive value 1
     if (recv(sockfd, value1, MAX_CHAR_LENGTH, 0) == -1){
-        printf("[ERROR][set_value] receive failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value] receive failed with code %s\n", strerror(errno));
         return -1;
     }
 
     // receive value 2
     if(recv(sockfd, htonl(value2), sizeof(uint32_t), 0) == -1){
-        printf("[ERROR][set_value] receive failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value] receive failed with code %s\n", strerror(errno));
         return -1;
     }
 
     // receive value 3
     if(recv(sockfd, htonl(value3), sizeof(float), 0) == -1){
-        printf("[ERROR][set_value] receive failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value] receive failed with code %s\n", strerror(errno));
         return -1;
-    }
+    }*/
+
+
     // success
     return 0;
 }
@@ -192,6 +205,7 @@ int get_value(char * key, char * value1, int * value2, float * value3){
  *  Returns 0 and modifies values if successful, -1 if error
  */
 int modify_value(char * key, char * value1, int value2, float value3){
+
     // Notify server this is a modify_value operation
     char op = '4';
     int bytes_sent = send(sockfd, op, strlen(op), 0);
@@ -204,6 +218,7 @@ int modify_value(char * key, char * value1, int value2, float value3){
         printf("[ERROR][modify_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
+    /*
     // send the first value
     if ( send(sockfd, value1, strlen(*value1), 0) ){
         printf("[ERROR][modify_value] send failed with code %s\n", strerror(errno));
@@ -228,7 +243,8 @@ int modify_value(char * key, char * value1, int value2, float value3){
     }
     if(feedback_code != 0){
         return -1; // error
-    }
+    }*/
+
     // success
     return 0;
 }
@@ -246,6 +262,7 @@ int delete_key(char * key){
         return -1;
     }
 
+  /*
     // send the key
     if ( send(sockfd, key, strlen(*key), 0) ){
         printf("[ERROR][delete_key] send failed with code %s\n", strerror(errno));
@@ -265,7 +282,9 @@ int delete_key(char * key){
     }else if(feedback_code == 1){
         // key does not exist in server
         return 1;
-    }
+    }*/
+
+
     // success
     return 0;
 }
@@ -284,11 +303,11 @@ int exist(char * key){
     }
 
     // send the key
-    if ( send(sockfd, key, strlen(*key), 0) ){
+    if ( send(sockfd, key, strlen(key), 0) ){
         printf("[ERROR][exist] send failed with code %s\n", strerror(errno));
         return -1;
     }
-
+/*
     // receive feedback to check if operation was carried out successfully on server
     int * feedback_code;
     if(recv(sockfd, htonl(feedback_code), sizeof(uint32_t), 0) == -1){
@@ -300,7 +319,9 @@ int exist(char * key){
         return -1; // error
     }else if(feedback_code == 1){
         return 1; // tuple exists
-    }
+    }*/
+
+
     // tuple does not exist
     return 0;
 
@@ -311,8 +332,9 @@ int exist(char * key){
  *  Check the number of items in the database (list)
  *  Returns the number of tuples in the list or -1 in cases of error
  * */
+
 int num_items(){
-    char op = '7';
+   /* char op = '7';
     int bytes_sent = send(sockfd, op, strlen(op), 0);
     if(bytes_sent == -1) {
         printf("[ERROR][num_items] send failed with code %s\n", strerror(errno));
@@ -336,5 +358,6 @@ int num_items(){
         printf("[ERROR][num_items] receive failed with code %s\n", strerror(errno));
         return -1;
     }
-    return items;
+    return items;*/
+   return 0;
 }
