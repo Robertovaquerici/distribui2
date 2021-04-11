@@ -11,6 +11,7 @@
 
 #include <pthread.h>
 #include <memory.h>
+#include <stdlib.h>
 
 #define MAX_THREADS 10
 #define THREAD_THRESH 2
@@ -41,7 +42,8 @@ void* worker_thread(void* param) {
         pthread_exit(1);
     }
     printf("OP code is %c\n", c);
-    char* key[KEY_SIZE], val1[KEY_SIZE];
+    char* key = malloc(KEY_SIZE);
+    char* val1 = malloc(KEY_SIZE);
     int32_t val2;
     float val3;
     switch (c) {
@@ -53,17 +55,19 @@ void* worker_thread(void* param) {
             break;
         case '3':
             // Receive key
-            if(recv(client_socket, &key, sizeof(KEY_SIZE), 0) == -1) {
+            if(recv(client_socket, &key, sizeof(char) * KEY_SIZE, 0) == -1) {
                 printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
                 pthread_exit(2);
             }
-            printf("%s", &key);
-            uint32_t fb_code = 0;
-            int bytes_sent = send(client_socket, fb_code, strlen(fb_code), 0);
-            if(bytes_sent == -1) {
-                printf("[ERROR][get_value][fb_code] send failed with code %s\n", strerror(errno));
-                pthread_exit(2);
+
+            // get_tuple()
+            val1 = "asd";
+            // Send value
+            if ( send(client_socket, &key, sizeof(char) * KEY_SIZE, 0) == -1 ){
+                printf("[ERROR][get_value][value] send failed with code %s\n", strerror(errno));
+                return -1;
             }
+
             break;
         case '4':
 
@@ -78,14 +82,11 @@ void* worker_thread(void* param) {
 
             break;
     }
-
-
-
-    char s = 'k';
-    int bytes_sent = send(client_socket, &s, strlen(s), 0);
+    char fb_code = 'k';
+    int bytes_sent = send(client_socket, &fb_code, sizeof(fb_code), 0);
     if(bytes_sent == -1) {
-        printf("[ERROR] send failed with code %s\n", strerror(errno));
-        return 3;
+        printf("[ERROR][get_value][fb_code] send failed with code %s\n", strerror(errno));
+        pthread_exit(2);
     }
     pthread_exit(0);
 }
