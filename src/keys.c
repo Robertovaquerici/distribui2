@@ -14,6 +14,8 @@
 
 #define MAX_CHAR_LENGTH 255
 
+#include "keys.h"
+
 
 /*
      *  op_code = 1     init()
@@ -34,7 +36,7 @@ int sockfd; // socket file descriptor
 
 
 /* Makes all necessary steps to connect to server so that the other functions can work */
-int setConnectionToServer(char * ipaddr, u_short port){
+int setConnectionToServer(char * ipaddr, uint16_t port){
 
 
     // Varias variables aquí tienen que ser puestas como globales
