@@ -20,6 +20,17 @@ void* worker_thread(void* param) {
     pthread_t this_t = pthread_self();
     pthread_detach(this_t);
     printf("[INFO]  Thread %lu spawned\n", this_t);
+
+
+
+
+
+
+
+
+
+
+
     pthread_exit(0);
 }
 

@@ -2,7 +2,7 @@
 // Created by rober on 3/4/21.
 //
 
-// I/O and error dependencies
+/*// I/O and error dependencies
 #include <stdio.h>
 #include <errno.h>
 
@@ -10,17 +10,31 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <memory.h>
+#include <memory.h>*/
 
-#define SERVER_PORT 23690
+// Include our custom-made library to connect to the server
+#include "keys.h"
+
+//#define SERVER_PORT 23690
 
 int main(int argc, char* argv[]) {
-    // argv[0]=clientBinary argv[1]=IPv4 address
-    if(argc < 2) {
-        printf("[ERROR] Not enough arguments\n");
+
+
+   // argv[0]=clientBinary argv[1]=IPv4 address
+    if(argc != 2) {
+        printf("[ERROR] Incorrect argument count\n");
         printf("Usage: ./clientBinary IPv4_address\n");
         return 1;
     }
+
+    if(!setConnectionToServer(argv[1])){
+        printf("Connection setting error!");
+    }
+
+
+
+
+    /*
     // Check and save the IPv4 parameter and port 23690
     struct sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
@@ -29,6 +43,10 @@ int main(int argc, char* argv[]) {
         printf("[ERROR] The first argument should contain a valid IPv4 address\n");
         return 1;
     }
+
+
+
+
     // Initialize socket
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd == -1) {
@@ -46,6 +64,9 @@ int main(int argc, char* argv[]) {
     if(bytes_sent == -1) {
         printf("[ERROR] send failed with code %s\n", strerror(errno));
         return 3;
-    }
+    }*/
+
+
+
 }
 

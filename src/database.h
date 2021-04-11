@@ -27,8 +27,11 @@ int get_tuple(char * key, char * val1, int val2, float val3);
 /* Returns 1 if tuple with key exists in file */
 int isValue(char * key);
 
+/* Display all tuples on screen*/
+void print_list();
+
 /* Saves and closes data from file */
-int endSession();
+int endSession(char * filename);
 
 
 

@@ -8,16 +8,25 @@
 #define KEY_SIZE 255
 #define VAL_1_SIZE 255
 
+/*
 char ** keys;
 char ** val1;
-int * val2;
-float * val3;
+int ** val2;
+float ** val3;
+*/
+
 int list_index;
+
+char keys[LIST_LENGTH][KEY_SIZE];
+char val1[LIST_LENGTH][VAL_1_SIZE];
+int val2[LIST_LENGTH];
+float val3[LIST_LENGTH];
 
 
 /* Loads the database file into memory */
 int startSession(){
     printf("Starting session...");
+    /*
     keys = malloc(KEY_SIZE * LIST_LENGTH);
     val1 = malloc((VAL_1_SIZE * LIST_LENGTH));
     val2 = malloc (LIST_LENGTH * sizeof(int));
@@ -28,6 +37,7 @@ int startSession(){
         printf("Error starting session: malloc null return\n");
         return -1;
     }
+    */
     printf("session started!\n");
     return 0;
 }
@@ -57,11 +67,20 @@ int isValue(char * key){
 
 }
 
+/* Display all tuples on screen*/
+void print_list(){
+
+}
+
 /* Saves and closes data from file */
-int endSession(){
+int endSession(char * filename){
+    /*
     free(keys);
     free(val1);
     free(val2);
     free(val3);
+     */
+
     printf("Session finished!\n");
 }
+
