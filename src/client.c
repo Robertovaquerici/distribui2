@@ -120,10 +120,6 @@ int main(int argc, char* argv[]) {
 
 
 
-
-
-
-
     /*
     // Check and save the IPv4 parameter and port 23690
     struct sockaddr_in server_addr;

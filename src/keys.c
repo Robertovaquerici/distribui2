@@ -31,6 +31,8 @@
      * */
 
 
+
+
 struct sockaddr_in server_addr; // socket to manage the connection
 int sockfd; // socket file descriptor
 
