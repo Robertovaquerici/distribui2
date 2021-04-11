@@ -139,6 +139,20 @@ int get_value(char * key, char * value1, int * value2, float * value3){
         printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
+    // Receive value
+    if(recv(sockfd, value1, MAX_CHAR_LENGTH, 0) == -1) {
+        printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
+        return -1;
+    }
+    printf("Value is %s\n", value1);
+
+    char fb_code = 0;
+    // Receive feedback code ('k': OK)
+    if(recv(sockfd, &fb_code, sizeof(fb_code), 0) == -1) {
+        printf("[ERROR][get_value][get_value][fb_code] recv failed with code %s\n", strerror(errno));
+        return(-2);
+    }
+    printf("Received feedback code: %c\n", fb_code);
 
 
 
