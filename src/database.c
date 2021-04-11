@@ -8,6 +8,7 @@
 #define KEY_SIZE 255
 #define VAL_1_SIZE 255
 
+#include "database.h"
 /*
 char ** keys;
 char ** val1;
@@ -44,27 +45,27 @@ int startSession(){
 
 /*   Inserts a given tuple into the file   */
 int insertTuple(char * key, char * val1, int val2, float val3){
-
+    printf("Inserting tuple:\n\tkey: %s\tvalue 1: %s\tvalue 2: %d\tvalue 3: %f", key, val1, val2, val3);
 }
 
 /* This will delete a tuple from the database file */
 int deleteTuple(char * key){
-
+    printf("Deleting tuple with key ==  %s", key);
 }
 
 /* Modifies the value of the tuple with said key */
 int mod_tuple(char * key, char * val1, int val2, float val3){
-
+    printf("Modifying tuple with key ==  %s to insert values:\n\tvalue 1: %s\tvalue 2: %d\tvalue 3: %f", key, val1, val2, val3);
 }
 
 /* Obtain values associated with the given key */
 int get_tuple(char * key, char * val1, int val2, float val3){
-
+    printf("Retrieving tuple with key ==  %s", key);
 }
 
 /* Returns 1 if tuple with key exists in file */
 int isValue(char * key){
-
+    printf("Checking if tuple with key ==  %s exists", key);
 }
 
 /* Display all tuples on screen*/

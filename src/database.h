@@ -5,10 +5,6 @@
 #ifndef DISTRIBUTED2_DATABASE_H
 #define DISTRIBUTED2_DATABASE_H
 
-#endif //DISTRIBUTED2_DATABASE_H
-
-
-
 /* Loads the database file into memory */
 int startSession();
 
@@ -32,6 +28,13 @@ void print_list();
 
 /* Saves and closes data from file */
 int endSession(char * filename);
+
+
+#endif //DISTRIBUTED2_DATABASE_H
+
+
+
+
 
 
 
