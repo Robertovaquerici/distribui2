@@ -16,10 +16,22 @@
 #define THREAD_THRESH 2
 #define LISTEN_PORT 23690
 
+typedef struct {
+    // 1: init      2: set      3: get          4: modify
+    // 5: delete    6: exists   7: num items
+    int32_t op_code;
+    char key[255];
+    char val1[255];
+    int32_t val2[255];
+    float val3;
+    char new_key[255];
+} Message;
+
 void* worker_thread(void* param) {
     pthread_t this_t = pthread_self();
     pthread_detach(this_t);
     printf("[INFO]  Thread %lu spawned\n", this_t);
+    int client_socket = *(int*) param;
     pthread_exit(0);
 }
 
@@ -50,17 +62,12 @@ int main() {
         return 3;
     }
     // Connection
-    int accept_socket, thread_err;
-    struct sockaddr_in client_addr;
-
-    pthread_t threads[MAX_THREADS] = {0};
-
-
     while(1) {
-        accept_socket = accept(sockfd, (struct sockaddr*) &client_addr, sizeof(socklen_t));
+        struct sockaddr_in client_addr;
+        int accept_socket = accept(sockfd, (struct sockaddr*) &client_addr, sizeof(socklen_t));
 
         pthread_t t = 0;
-        thread_err = pthread_create(&t, NULL, &worker_thread, NULL);
+        int thread_err = pthread_create(&t, NULL, &worker_thread, (void*) &accept_socket);
         if(thread_err != 0) {
             printf("[ERROR] pthread_create failed with code %d\n", thread_err);
             return 3;

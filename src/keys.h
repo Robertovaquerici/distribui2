@@ -5,14 +5,11 @@
 #ifndef DISTRIBUTED2_KEYS_H
 #define DISTRIBUTED2_KEYS_H
 
-#endif //DISTRIBUTED2_KEYS_H
-
-#include "keys.c"
-
+#include <stdint.h>
 
 
 /* Makes all necessary steps to connect to server so that the other functions can work */
-int setConnectionToServer(char * ipaddr, u_short port); // returns 0 if connection is successful
+int setConnectionToServer(char * ipaddr, uint16_t port); // returns 0 if connection is successful
 
 /* Once the service is no longer necessary, this function ends the connection from client to server */
 int endConnectionToServer();
@@ -58,3 +55,6 @@ int exist(char * key);
  *  Returns the number of tuples in the list or -1 in cases of error
  * */
 int num_items();
+
+#endif //DISTRIBUTED2_KEYS_H
+
