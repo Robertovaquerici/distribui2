@@ -12,7 +12,7 @@
 
 
 /* Makes all necessary steps to connect to server so that the other functions can work */
-int setConnectionToServer(char * ipaddr);
+int setConnectionToServer(char * ipaddr, u_short port); // returns 0 if connection is successful
 
 /* Once the service is no longer necessary, this function ends the connection from client to server */
 int endConnectionToServer();
@@ -57,4 +57,4 @@ int exist(char * key);
  *  Check the number of items in the database (list)
  *  Returns the number of tuples in the list or -1 in cases of error
  * */
-int num_items(int socket);
+int num_items();

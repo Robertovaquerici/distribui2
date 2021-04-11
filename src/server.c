@@ -23,7 +23,7 @@ void* worker_thread(void* param) {
 
 
 
-
+    // here goes the server code to manage the client's requests
 
 
 

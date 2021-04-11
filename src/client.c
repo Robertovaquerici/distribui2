@@ -15,7 +15,7 @@
 // Include our custom-made library to connect to the server
 #include "keys.h"
 
-//#define SERVER_PORT 23690
+#define SERVER_PORT 23690
 
 int main(int argc, char* argv[]) {
 
@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if(!setConnectionToServer(argv[1])){
+    if(!setConnectionToServer(argv[1], SERVER_PORT)){
         printf("Connection setting error!");
     }
 
