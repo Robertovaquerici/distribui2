@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 
             int err = get_value(key, val1, &val2, &val3);
             if (err) {
-                printf("get_value didn't work");
+                printf("[ERROR] get_value");
             }
 
             free(key);

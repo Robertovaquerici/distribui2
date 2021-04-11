@@ -102,22 +102,14 @@ int init(int socket){
  *  Returns 0 if successful, -1 if error
  * */
 int set_value(char * key, char * value1, int value2, float value3){
-
     // Notify server this is a set_value operation
     char op = '2';
-    if(( send(sockfd, &op, sizeof(char), 0)) == -1) {
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
+    int bytes_sent = send(sockfd, &op, sizeof(char), 0);
+    if(bytes_sent == -1) {
+        printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
-    // send the key
-    if ( send(sockfd, key, MAX_CHAR_LENGTH, 0) ){
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
-        return -1;
-    }
-
-    // succcess
     return 0;
-
 }
 
 /*
@@ -125,7 +117,6 @@ int set_value(char * key, char * value1, int value2, float value3){
  *  Returns 0 and sets values to given parameters if successful, returns -1 if error
  * */
 int get_value(char * key, char * value1, int * value2, float * value3){
-
     // Notify server this is a get_value operation
     char op = '3';
     int bytes_sent = send(sockfd, &op, sizeof(char), 0);

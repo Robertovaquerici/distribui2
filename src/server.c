@@ -12,11 +12,14 @@
 #include <pthread.h>
 #include <memory.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define MAX_THREADS 10
 #define THREAD_THRESH 2
 #define LISTEN_PORT 23690
 #define KEY_SIZE 255
+
+#include "database.h"
 
 typedef struct {
     // 1: init      2: set      3: get          4: modify
@@ -35,6 +38,14 @@ void* worker_thread(void* param) {
 
     int client_socket = *(int*) param;
     printf("Socket for client %d\n", client_socket);
+
+    // Initialize these values before the loop
+    char* key = malloc(KEY_SIZE);
+    char* val1 = malloc(KEY_SIZE);
+    int32_t val2, number_of_tuples;
+    float val3;
+    bool error = false;
+
     // Receive OP code
     char c;
     if(recv(client_socket, &c, sizeof(char), NULL) == -1) {
@@ -42,16 +53,33 @@ void* worker_thread(void* param) {
         pthread_exit(1);
     }
     printf("OP code is %c\n", c);
-    char* key = malloc(KEY_SIZE);
-    char* val1 = malloc(KEY_SIZE);
-    int32_t val2;
-    float val3;
+
     switch (c) {
         case '1':
 
             break;
         case '2':
-
+            // Receive key
+            if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
+                printf("[ERROR][set_value][key] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
+            // Receive val1
+            if(recv(client_socket, val1, sizeof(char) * KEY_SIZE, 0) == -1) {
+                printf("[ERROR][set_value][val1] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
+            // Receive val2
+            if(recv(client_socket, &val2, sizeof(val2), 0) == -1) {
+                printf("[ERROR][set_value][val2] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
+            val2 = ntohl(val2);
+            // Receive val3
+            if(recv(client_socket, &val3, sizeof(val3), 0) == -1) {
+                printf("[ERROR][set_value][val3] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
             break;
         case '3':
             // Receive key
@@ -70,22 +98,57 @@ void* worker_thread(void* param) {
 
             break;
         case '4':
-
+            // Receive key
+            if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
+                printf("[ERROR][set_value][key] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
+            // Receive val1
+            if(recv(client_socket, val1, sizeof(char) * KEY_SIZE, 0) == -1) {
+                printf("[ERROR][set_value][val1] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
+            // Receive val2
+            if(recv(client_socket, &val2, sizeof(val2), 0) == -1) {
+                printf("[ERROR][set_value][val2] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
+            val2 = ntohl(val2);
+            // Receive val3
+            if(recv(client_socket, &val3, sizeof(val3), 0) == -1) {
+                printf("[ERROR][set_value][val3] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
             break;
         case '5':
-
+            // Receive key
+            if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
+                printf("[ERROR][set_value][key] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
             break;
         case '6':
-
+            // Receive key
+            if(recv(client_socket, key, sizeof(char) * KEY_SIZE, 0) == -1) {
+                printf("[ERROR][exists] recv failed with code %s\n", strerror(errno));
+                pthread_exit(2);
+            }
+            if(!isValue(key)) error = true;
             break;
         case '7':
-
+            // Send value
+            number_of_tuples = 27;
+            if ( send(client_socket, &number_of_tuples, sizeof(char) * KEY_SIZE, 0) == -1 ){
+                printf("[ERROR][num_items] send failed with code %s\n", strerror(errno));
+                return -1;
+            }
             break;
     }
     char fb_code = 'k';
+    if(error) fb_code = 'e';
     int bytes_sent = send(client_socket, &fb_code, sizeof(fb_code), 0);
     if(bytes_sent == -1) {
-        printf("[ERROR][get_value][fb_code] send failed with code %s\n", strerror(errno));
+        printf("[ERROR][fb_code] send failed with code %s\n", strerror(errno));
         pthread_exit(2);
     }
     pthread_exit(0);
