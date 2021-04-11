@@ -55,23 +55,8 @@ void* worker_thread(void* param) {
                 printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
                 return 3;
             }
-            // Receive val1
-            if(recv(client_socket, &val1, sizeof(KEY_SIZE), NULL) == -1) {
-                printf("[ERROR][get_value][val1] recv failed with code %s\n", strerror(errno));
-                return 3;
-            }
-            // Receive val2
-            if(recv(client_socket, &val2, sizeof(KEY_SIZE), NULL) == -1) {
-                printf("[ERROR][get_value][val2] recv failed with code %s\n", strerror(errno));
-                return 3;
-            }
-            // Receive val3
-            if(recv(client_socket, &val3, sizeof(KEY_SIZE), NULL) == -1) {
-                printf("[ERROR][get_value][val3] recv failed with code %s\n", strerror(errno));
-                return 3;
-            }
-            val2 = ntohl(val2);
-            printf("%s, %s, %d, %f\n", key, val1, val2, val3);
+            //printf("%s, %s, %d, %f\n", key, val1, val2, val3);
+            printf("%s", key);
             uint32_t fb_code = 0;
             int bytes_sent = send(client_socket, fb_code, strlen(fb_code), 0);
             if(bytes_sent == -1) {
