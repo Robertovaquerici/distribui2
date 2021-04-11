@@ -20,9 +20,6 @@
 #define SERVER_PORT 23690
 #define CHAR_LENGTH 255
 
-
-
-
 void scase2();
 void scase3();
 void scase4();
@@ -30,26 +27,17 @@ void scase5();
 void scase6();
 void scase7();
 
-
-
-
-
 int main(int argc, char* argv[]) {
-
-
    // argv[0]=clientBinary argv[1]=IPv4 address
     if(argc != 2) {
         printf("[ERROR] Incorrect argument count\n");
         printf("Usage: ./clientBinary IPv4_address\n");
         return 1;
     }
-
-    if(!setConnectionToServer(argv[1], SERVER_PORT)){
-        printf("Connection setting error!");
+    if(setConnectionToServer(argv[1], SERVER_PORT) != 0){
+        printf("[ERROR] Connection was not successful\n");
+        return 2;
     }
-
-    
-
     int option;
     do{
 

@@ -104,7 +104,7 @@ int init(int socket){
         printf("[ERROR][init][fb_code] recv failed with code %s\n", strerror(errno));
         return(-1);
     }
-    if(fb_code = 'k')
+    if(fb_code == 'k')
         return 0;
 
     // success
@@ -155,7 +155,7 @@ int set_value(char * key, char * value1, int value2, float value3){
         printf("[ERROR][set_value][fb_code] recv failed with code %s\n", strerror(errno));
         return(-2);
     }
-    if(fb_code = 'k')
+    if(fb_code == 'k')
         return 0;
     //printf("Received feedback code: %c\n", fb_code);
 
@@ -170,7 +170,6 @@ int set_value(char * key, char * value1, int value2, float value3){
  *  Returns 0 and sets values to given parameters if successful, returns -1 if error
  * */
 int get_value(char * key, char * value1, int * value2, float * value3){
-
     // Notify server this is a get_value operation
     char op = '3';
     int bytes_sent = send(sockfd, &op, sizeof(char), 0);
@@ -178,20 +177,17 @@ int get_value(char * key, char * value1, int * value2, float * value3){
         printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
-
     // send the key
     if ( send(sockfd, key, MAX_CHAR_LENGTH, 0) == -1 ){
         printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
         return -1;
     }
-
     // Receive value 1
     if(recv(sockfd, value1, MAX_CHAR_LENGTH, 0) == -1) {
         printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
         return -1;
     }
     // printf("Value is %s\n", value1);
-
 
     // receive value 2
     //int val2;
@@ -214,15 +210,13 @@ int get_value(char * key, char * value1, int * value2, float * value3){
     float v3 = ntohl(val3);
     value3 = &v3;
 
-
-
     char fb_code = 0;
     // Receive feedback code ('k': OK)
     if(recv(sockfd, &fb_code, sizeof(fb_code), 0) == -1) {
         printf("[ERROR][get_value][fb_code] recv failed with code %s\n", strerror(errno));
         return(-2);
     }
-    if(fb_code = 'k')
+    if(fb_code == 'k')
         return 0;
     //printf("Received feedback code: %c\n", fb_code);
 
@@ -257,7 +251,7 @@ int modify_value(char * key, char * value1, int value2, float value3) {
         printf("[ERROR][modify_value][fb_code] recv failed with code %s\n", strerror(errno));
         return (-1);
     }
-    if (fb_code = 'e'){
+    if (fb_code == 'e'){
         return -1;
     }
     // success

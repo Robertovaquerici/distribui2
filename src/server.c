@@ -140,7 +140,7 @@ void* worker_thread(void* param) {
             number_of_tuples = 27;
             if ( send(client_socket, &number_of_tuples, sizeof(char) * KEY_SIZE, 0) == -1 ){
                 printf("[ERROR][num_items] send failed with code %s\n", strerror(errno));
-                return -1;
+                pthread_exit(2);
             }
             break;
     }
@@ -197,8 +197,4 @@ int main() {
             return 3;
         }
     }
-
-
-
-    return 0;
 }
