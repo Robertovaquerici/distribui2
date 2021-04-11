@@ -89,15 +89,12 @@ int endConnectionToServer(){
  * Returns 0 on success and -1 on error
  * */
 int init(int socket){
-
-
     char op = '1';
     int bytes_sent = send(sockfd, &op, sizeof(char), 0);
     if(bytes_sent == -1) {
         printf("[ERROR][init] send failed with code %s\n", strerror(errno));
         return -1;
     }
-
     char fb_code = 0;
     // Receive feedback code ('k': OK)
     if(recv(sockfd, &fb_code, sizeof(fb_code), 0) == -1) {
@@ -106,9 +103,7 @@ int init(int socket){
     }
     if(fb_code == 'k')
         return 0;
-
-    // success
-    return 0;
+    else return -1;
 }
 
 /*
@@ -120,49 +115,43 @@ int set_value(char * key, char * value1, int value2, float value3){
     // Notify server this is a set_value operation
     char op = '2';
     if(( send(sockfd, &op, sizeof(char), 0)) == -1) {
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
+        printf("[ERROR][set_value][op_code] send failed with code %s\n", strerror(errno));
         return -1;
     }
     // send the key
-    if ( send(sockfd, key, MAX_CHAR_LENGTH, 0) ){
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
+    if ( send(sockfd, key, MAX_CHAR_LENGTH, 0) == -1){
+        printf("[ERROR][set_value][key] send failed with code %s\n", strerror(errno));
         return -1;
     }
 
     //// ////
     // send the first value
-    if ( send(sockfd, value1, MAX_CHAR_LENGTH, 0) ){
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
+    if ( send(sockfd, value1, MAX_CHAR_LENGTH, 0) == -1){
+        printf("[ERROR][set_value][val1] send failed with code %s\n", strerror(errno));
         return -1;
     }
     // send the second value
     uint32_t val2 = htonl(value2);
-    if ( send(sockfd, &val2, sizeof(uint32_t), 0) ){
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
+    if ( send(sockfd, &val2, sizeof(uint32_t), 0) == -1){
+        printf("[ERROR][set_value][val2] send failed with code %s\n", strerror(errno));
         return -1;
     }
 
    // send the third value
    uint32_t val3 = htonl(value3); /// ????¿¿¿¿
-    if ( send(sockfd, &val3, sizeof(uint32_t), 0) ){
-        printf("[ERROR][set_value] send failed with code %s\n", strerror(errno));
+    if ( send(sockfd, &val3, sizeof(uint32_t), 0) == -1){
+        printf("[ERROR][set_value][val3] send failed with code %s\n", strerror(errno));
         return -1;
     }
-
     char fb_code = 0;
     // Receive feedback code ('k': OK)
     if(recv(sockfd, &fb_code, sizeof(fb_code), 0) == -1) {
         printf("[ERROR][set_value][fb_code] recv failed with code %s\n", strerror(errno));
         return(-2);
     }
-    if(fb_code == 'k')
-        return 0;
+    if(fb_code == 'k') return 0;
+    else return -1;
     //printf("Received feedback code: %c\n", fb_code);
-
-
-    // succcess
-    return 0;
-
 }
 
 /*
@@ -174,17 +163,17 @@ int get_value(char * key, char * value1, int * value2, float * value3){
     char op = '3';
     int bytes_sent = send(sockfd, &op, sizeof(char), 0);
     if(bytes_sent == -1) {
-        printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value][op_code] send failed with code %s\n", strerror(errno));
         return -1;
     }
     // send the key
     if ( send(sockfd, key, MAX_CHAR_LENGTH, 0) == -1 ){
-        printf("[ERROR][get_value] send failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value][key] send failed with code %s\n", strerror(errno));
         return -1;
     }
     // Receive value 1
     if(recv(sockfd, value1, MAX_CHAR_LENGTH, 0) == -1) {
-        printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value][val1] recv failed with code %s\n", strerror(errno));
         return -1;
     }
     // printf("Value is %s\n", value1);
@@ -193,7 +182,7 @@ int get_value(char * key, char * value1, int * value2, float * value3){
     //int val2;
     uint32_t val2;
     if(recv(sockfd, &val2, sizeof(uint32_t), 0) == -1){
-        printf("[ERROR][get_value] receive failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value][val2] receive failed with code %s\n", strerror(errno));
         return -1;
     }
     int v = ntohl(val2); ////// val2
@@ -204,7 +193,7 @@ int get_value(char * key, char * value1, int * value2, float * value3){
     //int val3 = htonl(value3);
     uint32_t val3;
     if(recv(sockfd, &val3, sizeof(float), 0) == -1){
-        printf("[ERROR][get_value] receive failed with code %s\n", strerror(errno));
+        printf("[ERROR][get_value][val3] receive failed with code %s\n", strerror(errno));
         return -1;
     }
     float v3 = ntohl(val3);
@@ -218,12 +207,7 @@ int get_value(char * key, char * value1, int * value2, float * value3){
     }
     if(fb_code == 'k')
         return 0;
-    //printf("Received feedback code: %c\n", fb_code);
-
-
-
-    // success
-    return 0;
+    else return -1;
 }
 
 /*
@@ -251,11 +235,9 @@ int modify_value(char * key, char * value1, int value2, float value3) {
         printf("[ERROR][modify_value][fb_code] recv failed with code %s\n", strerror(errno));
         return (-1);
     }
-    if (fb_code == 'e'){
-        return -1;
-    }
-    // success
-    return 0;
+    if(fb_code == 'k')
+        return 0;
+    else return -1;
 }
 
 /*
@@ -277,9 +259,9 @@ int delete_key(char * key){
         printf("[ERROR][delete_key][fb_code] recv failed with code %s\n", strerror(errno));
         return(-1);
     }
-
-    // success
-    return 0;
+    if(fb_code == 'k')
+        return 0;
+    else return -1;
 }
 
 /*
@@ -300,26 +282,20 @@ int exist(char * key){
         printf("[ERROR][exist] send failed with code %s\n", strerror(errno));
         return -1;
     }
-
-
     char fb_code = 0;
     // Receive feedback code ('k': OK)
     if(recv(sockfd, &fb_code, sizeof(fb_code), 0) == -1) {
         printf("[ERROR][delete_key][fb_code] recv failed with code %s\n", strerror(errno));
         return(-1);
     }
-
-    // tuple does not exist
-    return 0;
-
-
+    if(fb_code == 'k')
+        return 0;
+    else return -1;
 }
-
 /*
  *  Check the number of items in the database (list)
  *  Returns the number of tuples in the list or -1 in cases of error
  * */
-
 int num_items(){
     int items;
 
@@ -329,8 +305,6 @@ int num_items(){
         printf("[ERROR][num_items] send failed with code %s\n", strerror(errno));
         return -1;
     }
-
-
     // receive value 2
     uint32_t val;
     if(recv(sockfd, &val, sizeof(uint32_t), 0) == -1){
@@ -345,7 +319,7 @@ int num_items(){
         printf("[ERROR][delete_key][fb_code] recv failed with code %s\n", strerror(errno));
         return(-1);
     }
-
-    return items;
-    //return 0;
+    if(fb_code == 'k')
+        return items;
+    else return -1;
 }

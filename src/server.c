@@ -180,6 +180,7 @@ int main() {
         printf("[ERROR] listen call failed with code %s\n", strerror(errno));
         return 3;
     }
+    printf("Listening\n");
     // Connection
     while(1) {
         struct sockaddr_in client_addr;

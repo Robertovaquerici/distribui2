@@ -40,7 +40,6 @@ int main(int argc, char* argv[]) {
     }
     int option;
     do{
-
         printf("Choose an option below and press Enter key\n");
         // 1: init      2: set      3: get          4: modify
         // 5: delete    6: exists   7: num items
@@ -50,26 +49,23 @@ int main(int argc, char* argv[]) {
         printf("[7] Return number of pairs in the database\n");
         printf("[8] Exit program\n");
         scanf("%d", &option);
-
     }
     while(option <= 0 || 8 <= option);
 
     switch (option) {
         case 1:
-            init();
+            if(init() == -1);
             break;
         case 2: // set_value
             scase2();
             break;
         case 3: // get_value
             {
-
-
             char *key = malloc(CHAR_LENGTH);
             char *val1 = malloc(CHAR_LENGTH);
             int val2;
             float val3;
-            printf("Insert key to retreive values:\n");
+            printf("Insert key to retrieve values:\n");
             scanf("%s", key);
 
             int err = get_value(key, val1, &val2, &val3);
@@ -102,12 +98,6 @@ int main(int argc, char* argv[]) {
 
 
     }
-
-
-
-
-
-
     /*
     // Check and save the IPv4 parameter and port 23690
     struct sockaddr_in server_addr;
@@ -117,10 +107,6 @@ int main(int argc, char* argv[]) {
         printf("[ERROR] The first argument should contain a valid IPv4 address\n");
         return 1;
     }
-
-
-
-
     // Initialize socket
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd == -1) {
@@ -139,11 +125,7 @@ int main(int argc, char* argv[]) {
         printf("[ERROR] send failed with code %s\n", strerror(errno));
         return 3;
     }*/
-
-
-
 }
-
 
 void scase2(){
     // SET VALUE
@@ -162,9 +144,10 @@ void scase2(){
     scanf("%f", &val3);
 
     int err = set_value(key, val1, val2, val3);
-    if (err) {
-        printf("set_value didn't work");
+    if (err == -1) {
+        printf("[ERROR] set_value was not successful\n");
     }
+    printf("[INFO] set_value was successful\n");
 
     free(key);
     free(val1);
@@ -191,7 +174,7 @@ void scase4(){
     printf("Insert val3:\n");
     scanf("%f", &val3);
 
-    if(modify_value(key, val1, val2, val3)){
+    if(modify_value(key, val1, val2, val3) == -1){
         printf("modify_value didn't work");
     }
 
@@ -208,7 +191,7 @@ void scase5(){
     scanf("%s", key);
 
     int err = delete_key(key);
-    if (err) {
+    if (err == -1) {
         printf("delete_key didn't work");
     }
 
