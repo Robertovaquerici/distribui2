@@ -74,6 +74,8 @@ int main(int argc, char* argv[]) {
             break;
         case 3: // get_value
             {
+
+
             char *key = malloc(CHAR_LENGTH);
             char *val1 = malloc(CHAR_LENGTH);
             int val2;
@@ -94,14 +96,16 @@ int main(int argc, char* argv[]) {
             scase4();
             break;
         case 5: // delete_key
-
+            scase5();
             break;
         case 6: // exists
-
+            scase6();
             break;
         case 7: // num items
-
+            // NUM ITEMS
+            printf("Num items: %d", num_items());
             break;
+
         default:
             printf("Wrong code. Try again!\n");
 
@@ -163,9 +167,9 @@ void scase2(){
     printf("Insert val1:\n");
     scanf("%s", val1);
     printf("Insert val2:\n");
-    scanf("%d", val2);
+    scanf("%d", &val2);
     printf("Insert val3:\n");
-    scanf("%f", val3);
+    scanf("%f", &val3);
 
     int err = set_value(key, val1, val2, val3);
     if (err) {
@@ -193,9 +197,9 @@ void scase4(){
     printf("Insert val1:\n");
     scanf("%s", val1);
     printf("Insert val2:\n");
-    scanf("%d", val2);
+    scanf("%d", &val2);
     printf("Insert val3:\n");
-    scanf("%f", val3);
+    scanf("%f", &val3);
 
     if(modify_value(key, val1, val2, val3)){
         printf("modify_value didn't work");
@@ -207,27 +211,37 @@ void scase4(){
 }
 
 void scase5(){
+    // DELETE TUPLE
     char *key = malloc(CHAR_LENGTH);
 
-    printf("Insert key to retreive values:\n");
+    printf("Insert key to delete tuple:\n");
     scanf("%s", key);
 
     int err = delete_key(key);
     if (err) {
-        printf("get_value didn't work");
+        printf("delete_key didn't work");
     }
 
     free(key);
-    free(val1);
 }
 
 void scase6(){
+    // EXISTS
+    char *key = malloc(CHAR_LENGTH);
 
+    printf("Insert key to delete tuple:\n");
+    scanf("%s", key);
+
+    int err = delete_key(key);
+    if (err == -1) {
+        printf("exists didn't work");
+    }else if(err == 1){
+        printf("key does not exist\n");
+    }
+    printf("Key does exist\n");
+    free(key);
 }
 
-void scase7(){
-
-}
 
 
 
