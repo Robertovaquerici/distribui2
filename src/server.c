@@ -38,7 +38,7 @@ void* worker_thread(void* param) {
     char c;
     if(recv(client_socket, &c, sizeof(char), NULL) == -1) {
         printf("[ERROR][op_code] recv failed with code %s\n", strerror(errno));
-        return 3;
+        pthread_exit(1);
     }
     printf("OP code is %c\n", c);
     char* key[KEY_SIZE], val1[KEY_SIZE];
@@ -53,16 +53,16 @@ void* worker_thread(void* param) {
             break;
         case '3':
             // Receive key
-            if(recv(client_socket, &key, sizeof(KEY_SIZE), NULL) == -1) {
+            if(recv(client_socket, &key, sizeof(KEY_SIZE), 0) == -1) {
                 printf("[ERROR][get_value][key] recv failed with code %s\n", strerror(errno));
-                return 3;
+                pthread_exit(2);
             }
-            printf("%s", key);
+            printf("%s", &key);
             uint32_t fb_code = 0;
             int bytes_sent = send(client_socket, fb_code, strlen(fb_code), 0);
             if(bytes_sent == -1) {
                 printf("[ERROR][get_value][fb_code] send failed with code %s\n", strerror(errno));
-                return -1;
+                pthread_exit(2);
             }
             break;
         case '4':
@@ -81,8 +81,8 @@ void* worker_thread(void* param) {
 
 
 
-    char* s = "Server, can you read this?\n";
-    int bytes_sent = send(client_socket, s, strlen(s), 0);
+    char s = 'k';
+    int bytes_sent = send(client_socket, &s, strlen(s), 0);
     if(bytes_sent == -1) {
         printf("[ERROR] send failed with code %s\n", strerror(errno));
         return 3;
