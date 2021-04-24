@@ -18,16 +18,16 @@ int deleteTuple(char * key);
 int mod_tuple(char * key, char * val1, int val2, float val3);
 
 /* Obtain values associated with the given key */
-int get_tuple(char * key, char * val1, int val2, float val3);
+int get_tuple(char * key, char * val1, int * val2, float * val3);
 
 /* Returns 1 if tuple with key exists in file */
 int isValue(char * key);
 
-/* Display all tuples on screen*/
-void print_list();
+/* Display all tuples on screen
+void print_list();*/
 
-/* Saves and closes data from file */
-int endSession(char * filename);
+/* Saves and closes data from file
+int endSession(char * filename);*/
 
 
 #endif //DISTRIBUTED2_DATABASE_H
