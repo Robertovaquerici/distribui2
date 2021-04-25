@@ -354,6 +354,33 @@ int isValue(char * key){
     return 0;
 }
 
+// Returns the amount of tuples in database
+int numTuples(){
+    FILE * dbfile = fopen(db, "r");
+
+    if(dbfile == 0){
+        printf("[numTuples] opening file error\n");
+        fclose(dbfile);
+        return -1;
+    }
+
+    // Prepare for fijle reading
+    char * line = NULL;
+    size_t lineSize = 0;
+    ssize_t nread = getline(&line, &lineSize, dbfile);
+    int size = 0;
+
+    while (nread != -1){ // fgets(line, TUPLE_SIZE, dbfile) != NULL
+        size++;
+        nread = getline(&line, &lineSize, dbfile);
+
+    }
+    fclose(dbfile);
+
+    return size;
+
+}
+
 /* Display all tuples on screen
 void print_list(){
 }*/

@@ -8,6 +8,9 @@
 /* Loads the database file into memory */
 int startSession();
 
+// destroy all previous tuples
+int initiateNewDB();
+
 /*   Inserts a given tuple into the file   */
 int insertTuple(char * key, char * val1, int val2, float val3);
 
@@ -22,6 +25,9 @@ int get_tuple(char * key, char * val1, int * val2, float * val3);
 
 /* Returns 1 if tuple with key exists in file */
 int isValue(char * key);
+
+// Returns the amount of tuples in database
+int numTuples();
 
 /* Display all tuples on screen
 void print_list();*/
